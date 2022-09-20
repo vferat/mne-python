@@ -577,7 +577,7 @@ class BrowserBase(ABC):
                 if ch_type == 'eeg':
                     picks = pick_types(inst.info, eeg=True)
                 elif ch_type in ( 'mag', 'grad'):
-                    picks = pick_types(inst.info, eeg=True)
+                    picks = pick_types(inst.info, meg=ch_type)
                 else:
                     continue
                 ax = fig.add_subplot(len(ch_types), 1, c+1)
