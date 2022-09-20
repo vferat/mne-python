@@ -684,6 +684,8 @@ class MNEBrowseFigure(BrowserBase, MNEFigure):
             self._redraw()
         elif key == 'h':  # histogram
             self._toggle_epoch_histogram()
+        elif key == 'o':  # topomap
+            self._toggle_topomap()
         elif key == 'j' and len(self.mne.projs):  # SSP window
             self._toggle_proj_fig()
         elif key == 'J' and len(self.mne.projs):
@@ -1460,6 +1462,12 @@ class MNEBrowseFigure(BrowserBase, MNEFigure):
             else:
                 plt.close(self.mne.fig_histogram)
 
+    def _toggle_topomap(self):
+        """Show topomap."""
+        if self.mne.instance_type in ['raw', 'epochs']:
+            self._create_topomap_fig()
+
+                
     def _toggle_bad_channel(self, idx):
         """Mark/unmark bad channels; `idx` is index of *visible* channels."""
         color, pick, marked_bad = super()._toggle_bad_channel(idx)

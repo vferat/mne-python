@@ -559,6 +559,32 @@ class BrowserBase(ABC):
 
         return fig
 
+    def _create_topomap_fig(self):
+        """Create topomap."""
+        from mne.viz.topomap import _plot_topomap
+        from mne import pick_types
+        from mne.io.pick import pick_info
+        inst = self.mne.inst
+        for ch_type in ('eeg', 'mag', 'grad'):
+            if ch_type == 'eeg':
+                picks = pick_types(inst.info, eeg=True)
+            elif ch_type in ( 'mag', 'grad'):
+                picks = pick_types(inst.info, eeg=True)
+        
+        fig = self._new_child_figure(figsize=(10,10), fig_name='fig_topomap',
+                                     window_title="test")
+        
+        ax = fig.add_subplot(1, 1, 1)
+        sphere = np.array((0,0,0,0.1))
+        data = inst.get_data(picks=picks)
+        info = pick_info(inst.info, picks)
+        xdata = self.mne.vline.get_xdata()
+        if xdata is not None:
+            i = int(xdata * inst.info['sfreq'])
+            fig = _plot_topomap(data[:,i], info, sphere=sphere, axes=ax)
+            self.mne.fig_topomap = fig
+            return fig
+    
     def _close_event(self, fig):
         """Look at _close_event in mne.fixes.py for why this exists."""
         pass
